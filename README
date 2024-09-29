@@ -1,0 +1,12 @@
+Bot_name: Sam
+Visibility: private
+
+URL: https://discord.com/api/oauth2/authorize?client_id=1175193484815253666&permissions=271969360&scope=bot
+
+Debug tool: code.interact(local=dict(globals(), **locals())) 
+
+Hacking idea: cracking the bots password can lead to banning members, pinging everyone
+maliciously
+
+Bibliography:
+Python documentation
