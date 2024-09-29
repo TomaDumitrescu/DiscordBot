@@ -54,7 +54,11 @@ def log_msg(msg: str, level: str):
 # bot instantiation
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+# global setup variables
 channel_id = 1175193291004846203
+songs_path = r"C:\Users\User\Desktop\discord_bot\songs\\"
+player = r"C:\Users\User\scoop\shims\ffmpeg.exe"
 
 # on_ready - called after connection to server is established
 @bot.event
@@ -92,7 +96,7 @@ async def roll(ctx, max_val: int):
 async def roll_error(ctx, error):
 	await ctx.send(str(error))
 
-# play - song chat command
+# play - chat command
 #   @ctx    : command invocation context
 #   @song   : song name that should be installed locally
 @bot.command(brief='Connect to the voice channel and play <song>')
@@ -102,13 +106,13 @@ async def play(ctx, song: str):
 		raise Exception('A voice channel must be open')
 
 	op_channel = await channel.connect()
-	path = r"C:\Users\User\Desktop\discord_bot\songs\\" + song
+	path = songs_path + song
 	if not os.path.exists(path):
 		raise Exception('The song name is not correct')
 
 	op_channel.play(
 		discord.FFmpegPCMAudio(
-			executable = r"C:\Users\User\scoop\shims\ffmpeg.exe",
+			executable = player,
 			source = path,
 		)
 	)
@@ -126,14 +130,14 @@ async def play_error(ctx, error):
 #   @ctx     : command invocation context
 @bot.command(brief='Lists available songs')
 async def list(ctx):
-	songs = r"C:\Users\User\Desktop\discord_bot\songs\\"
 	song_list = ""
-	for song in os.listdir(songs):
+
+	for song in os.listdir(songs_path):
 		song_list = song_list + song + "\n"
 
 	await ctx.send(song_list)
 
-# scram chat command
+# scram - chat command
 #   @ctx     : command invocation context
 @bot.command(brief='Leave the voice channel instantly')
 async def scram(ctx):
@@ -165,7 +169,7 @@ async def on_voice_state_update(member, before, after):
 	if bot_left_alone:
 		await bot.voice_clients[0].disconnect()
 
-# on_member_join - called when the a member joins the server
+# on_member_join - called when a member joins the server
 #   @member		: member when joining the server
 @bot.event
 async def on_member_join(member):

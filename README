@@ -27,9 +27,23 @@ on the voice channel, then automatically will leave
 greet message will be displayed for that member. Five messages are
 possible and the one displayed is chosen by a random number from 1-5
 
-# Debugging:
-code.interact(local=dict(globals(), **locals())) 
+# Debugging tool:
+
+code.interact(local=dict(globals(), **locals()))
+
+# Notes:
+
+- To add more songs, install files and put them in songs library
+
+- For new environments, modify the global setup variables. This
+method will lead to an easier setup for anyone who installs the
+bot (for example, some paths may differ from the original project
+configuration)
+
+- Bot token is secret, because having access to it grants permissions
+to perform maliciously actions on every Discord server where it is present
 
 # Bibliography:
+
 https://docs.pycord.dev/en/stable/api/index.html
 https://ncs.io/
