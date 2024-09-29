@@ -54,6 +54,7 @@ def log_msg(msg: str, level: str):
 # bot instantiation
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
+channel_id = 1175193291004846203
 
 # on_ready - called after connection to server is established
 @bot.event
@@ -151,7 +152,9 @@ async def scram_error(ctx, error):
 	await ctx.send(str(error))
 
 # on_voice_state_update - called when the bot is left alone on the voice channel
-#   @msg : discord.message.Message
+#   @member		: member whose voice states changed
+#   @before		: voice state prior to the changes
+#   @after		: voice state after the changes
 @bot.event
 async def on_voice_state_update(member, before, after):
 	if before.channel == None:
@@ -161,6 +164,28 @@ async def on_voice_state_update(member, before, after):
 	bot_left_alone = len(members) == 1 and members[0].name == bot.user.name
 	if bot_left_alone:
 		await bot.voice_clients[0].disconnect()
+
+# on_member_join - called when the a member joins the server
+#   @member		: member when joining the server
+@bot.event
+async def on_member_join(member):
+	channel = bot.get_channel(channel_id)
+	reply = random.randint(1, 5)
+	greets = ""
+
+	match reply:
+		case 1:
+			greets = "You made it, " + member.name + "!"
+		case 2:
+			greets = "Nice to meet you, " + member.name + "!"
+		case 3:
+			greets = "Welcome to the server, " + member.name + "!"
+		case 4:
+			greets = "Have fun, " + member.name + "!"
+		case _:
+			greets = "Hello, " + member.name + "!"
+
+	await channel.send(greets)
 
 ############################# Program Entry Point ##############################
 

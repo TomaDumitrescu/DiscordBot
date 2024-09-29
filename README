@@ -1,10 +1,35 @@
-Bot_name: Sam
+# Copyright 2024 Toma-Ioan Dumitrescu
+
+# Description
+
+Bot name: Sam
 Visibility: private
 
-Debug tool: code.interact(local=dict(globals(), **locals())) 
+Features:
 
-Hacking idea: cracking the bots password can lead to banning members, pinging everyone
-maliciously
+- play command: connects to the voice channel and plays the song
+given as parameter, if the song name is correct
+Example:
+!play silence.mp3
 
-Bibliography:
-Python documentation
+- list command: displays the available songs
+Example:
+!list
+
+- scram command: the bot will leave the channel instantly
+Example:
+!scram
+
+- event handler for on_voice_state_update: if the bot is left alone
+on the voice channel, then automatically will leave
+
+- event handler for on_member_join: when a member joins, a random
+greet message will be displayed for that member. Five messages are
+possible and the one displayed is chosen by a random number from 1-5
+
+# Debugging:
+code.interact(local=dict(globals(), **locals())) 
+
+# Bibliography:
+https://docs.pycord.dev/en/stable/api/index.html
+https://ncs.io/
