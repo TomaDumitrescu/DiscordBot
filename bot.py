@@ -1,3 +1,5 @@
+# Copyright 2024 Toma-Ioan Dumitrescu
+
 #!./.venv/bin/python
 
 import discord      # base discord module
@@ -8,11 +10,9 @@ import random       # random number generator
 
 from discord.ext import commands    # Bot class and utils
 
-################################################################################
-############################### HELPER FUNCTIONS ###############################
-################################################################################
+############################### Helper Functions ###############################
 
-# log_msg - fancy print
+# log_msg - pretty format print
 #   @msg   : string to print
 #   @level : log level from {'debug', 'info', 'warning', 'error'}
 def log_msg(msg: str, level: str):
@@ -49,9 +49,7 @@ def log_msg(msg: str, level: str):
 		caller.function, caller.lineno,
 		_extra_ansi['unbold'], msg, _extra_ansi['clear']))
 
-################################################################################
-############################## BOT IMPLEMENTATION ##############################
-################################################################################
+############################## Bot Implementation ##############################
 
 # bot instantiation
 intents = discord.Intents.all()
@@ -134,9 +132,37 @@ async def list(ctx):
 
 	await ctx.send(song_list)
 
-################################################################################
-############################# PROGRAM ENTRY POINT ##############################
-################################################################################
+# scram chat command
+#   @ctx     : command invocation context
+@bot.command(brief='Leave the voice channel instantly')
+async def scram(ctx):
+	channel = ctx.voice_client
+	if channel == None:
+		raise Exception('A voice channel must be open')
+
+	await channel.disconnect()
+	await ctx.send(f"Sam left the voice channel")
+
+# scram - error handler for the <scram> command
+#   @ctx     : command that crashed invocation context
+#   @error   : ...
+@scram.error
+async def scram_error(ctx, error):
+	await ctx.send(str(error))
+
+# on_voice_state_update - called when the bot is left alone on the voice channel
+#   @msg : discord.message.Message
+@bot.event
+async def on_voice_state_update(member, before, after):
+	if before.channel == None:
+		return
+
+	members = before.channel.members
+	bot_left_alone = len(members) == 1 and members[0].name == bot.user.name
+	if bot_left_alone:
+		await bot.voice_clients[0].disconnect()
+
+############################# Program Entry Point ##############################
 
 if __name__ == '__main__':
 	# check that token exists in environment
