@@ -45,6 +45,7 @@ configuration)
 - Bot token is secret, because having access to it grants permissions
 to perform maliciously actions on every Discord server where it is present
 
+
 # Bibliography:
 
 https://docs.pycord.dev/en/stable/api/index.html
